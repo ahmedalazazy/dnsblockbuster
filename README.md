@@ -39,6 +39,14 @@ unbound_timeout=240
 
 Check the documentation for how to set the timeout on the operating system you're using.
 
+## Notes before usage
+
+Please note that some of the regular expressions in the script are CPU and memory hungry. If you run dnsmasq or Unbound on a slow device you're adviced to run this script on a faster computer and then transfer the resulting host block files.
+
+More list can be found at [The Firebog](https://firebog.net/)
+
+Feel free to contribute!
+
 ## Usage
 
 ```
@@ -59,7 +67,7 @@ In `dnsmasq` use the `addn-host` option in `dnsmasq.conf` (change your path to f
 addn-hosts=/etc/dnsmasq-blocked-hosts.conf
 ```
 
-## Whitelist
+### Whitelist
 
 If you need to whitelist domains create a file called `whitelist.txt` and add each domain on a single line without any whitespace between, like this:
 
