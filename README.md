@@ -67,7 +67,7 @@ In `dnsmasq` use the `addn-host` option in `dnsmasq.conf` (change your path to f
 addn-hosts=/etc/dnsmasq-blocked-hosts.conf
 ```
 
-### Whitelist
+### Whitelist and personal blacklist
 
 If you need to whitelist domains create a file called `whitelist.txt` and add each domain on a single line without any whitespace between, like this:
 
@@ -77,6 +77,8 @@ bar.zoo
 ```
 
 DNSBlockBuster will automatically remove the whitelisted entries.
+
+Also if you want to add some domains that isn't already located in any of the host files that gets downloaded, create a file called `blacklist.txt` and add the domains to that.
 
 ## Trouble shooting the block lists
 

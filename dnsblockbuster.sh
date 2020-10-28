@@ -19,6 +19,13 @@ tmpfile=$(mktemp)
 # Get all host files and concatenate into one.
 echo "$blacklist" | xargs -n 1 wget -O - > "$tmpfile"
 
+# Personal blacklist
+if [ ! -f "blacklist.txt" ]; then
+    printf "\nNo blacklist.txt found, running without.\n\n"
+else
+    cat blacklist.txt >> "$tmpfile"
+fi
+
 # Whitelist.
 if [ ! -f "whitelist.txt" ]; then
     printf "\nNo whitelist.txt found, running without.\n\n"
