@@ -1,4 +1,3 @@
-host-files
 whitelist.txt
 blacklist.txt
 dnsmasq-blocked-hosts.txt

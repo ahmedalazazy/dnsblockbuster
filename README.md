@@ -2,7 +2,7 @@
 
 DNSBlockBuster is a shell script that creates a DNS blacklist for Unbound and dnsmasq from a bunch of DNS host lists.
 
-The DNS hosts lists are used to block ads, porn sites, tracking and other bad domains.
+The DNS hosts lists are used to block ads, porn sites, tracking and other domains.
 
 ## Information about redirecting
 
@@ -41,7 +41,7 @@ Check the documentation for how to set the timeout on the operating system you'r
 
 ## Notes before usage
 
-Please note that some of the regular expressions in the script are CPU and memory hungry. If you run dnsmasq or Unbound on a slow device you're adviced to run this script on a faster computer and then transfer the resulting host block files.
+Please note that some of the regular expressions in the script are CPU hungry. If you run dnsmasq or Unbound on a slow device you're advised to run this script on a faster computer and then transfer the resulting host block files.
 
 More list can be found at [The Firebog](https://firebog.net/)
 
@@ -49,9 +49,15 @@ Feel free to contribute!
 
 ## Usage
 
+By default DNSBlockBuster uses a list of online hosts files listed in [online-hosts-files.txt](online-hosts-files.txt), these are the default hosts files. If you don't want to use those, or simply want to remove or add some, copy the file into a new one called `personal-online-hosts-files.txt` and edit that to suit your needs.
+
+Generate the DNS block files with running:
+
 ```
-$ ./dnsblockbuster.sh
+$ sh dnsblockbuster.sh
 ```
+
+DNSBlockBuster creates two files. `unbound-blocked-hosts.conf` is for usage with Unbound, while `dnsmasq-blocked-hosts.conf` is for dnsmasq.
 
 When the script has finished generating the hosts files you need to include those.
 
@@ -67,18 +73,20 @@ In `dnsmasq` use the `addn-host` option in `dnsmasq.conf` (change your path to f
 addn-hosts=/etc/dnsmasq-blocked-hosts.conf
 ```
 
+Reload or restart the DNS server.
+
 ### Whitelist and personal blacklist
 
-If you need to whitelist domains create a file called `whitelist.txt` and add each domain on a single line without any whitespace between, like this:
+If you need to whitelist some domains, create a file called `whitelist.txt` and add each domain on a single line without any whitespace between, like this:
 
 ```
-foo.bar
-bar.zoo
+example.org
+example.com
 ```
 
 DNSBlockBuster will automatically remove the whitelisted entries.
 
-Also if you want to add some domains that isn't already located in any of the host files that gets downloaded, create a file called `blacklist.txt` and add the domains to that.
+If you want to add some domains to the block list that isn't already located in any of the online host files that gets downloaded, create a file called `blacklist.txt` and add the domains to that like in the whitelist.
 
 ## Trouble shooting the block lists
 

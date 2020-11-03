@@ -1,23 +1,17 @@
 #!/bin/sh
 
 # Get the host files.
-blacklist=$(cat <<'EOF'
-https://raw.githubusercontent.com/StevenBlack/hosts/master/alternates/porn/hosts
-https://github.com/chadmayfield/my-pihole-blocklists/raw/master/lists/pi_blocklist_porn_all.list
-https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/extra.txt
-https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/spy.txt
-https://raw.githubusercontent.com/crazy-max/WindowsSpyBlocker/master/data/hosts/update.txt
-https://gitlab.com/quidsup/notrack-blocklists/raw/master/notrack-blocklist.txt
-https://raw.githubusercontent.com/oneoffdallas/dohservers/master/list.txt
-https://raw.githubusercontent.com/Sekhan/TheGreatWall/master/TheGreatWall.txt
-EOF
-)
+if [ ! -f "personal-online-hosts-files.txt" ]; then
+    online_hosts_list=$(cat online-hosts-files.txt)
+else
+    online_hosts_list=$(cat personal-online-hosts-files.txt)
+fi
 
 # Create a temporary file.
 tmpfile=$(mktemp)
 
 # Get all host files and concatenate into one.
-echo "$blacklist" | xargs -n 1 wget -O - > "$tmpfile"
+echo "$online_hosts_list" | xargs -n 1 wget -O - > "$tmpfile"
 
 # Personal blacklist
 if [ ! -f "blacklist.txt" ]; then
