@@ -2,7 +2,7 @@
 
 DNSBlockBuster is a shell script that creates a DNS blacklist for Unbound and dnsmasq from a bunch of DNS host lists.
 
-The DNS hosts lists are used to block ads, porn sites, tracking, DNS over HTTPS, and other domains.
+The DNS hosts lists are used to block ads, porn sites, tracking and other domains.
 
 ## Information about redirecting
 
