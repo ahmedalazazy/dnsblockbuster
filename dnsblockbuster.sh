@@ -1,5 +1,7 @@
 #!/bin/sh
 
+OS=$(uname -s)
+
 # Get the host files.
 if [ ! -f "personal-online-hosts-files.txt" ]; then
     online_hosts_list=$(cat online-hosts-files.txt)
@@ -10,8 +12,16 @@ fi
 # Create a temporary file.
 tmpfile=$(mktemp)
 
+# Graceful cleanup and exit when script is done.
+trap 'rm -f $tmpfile $tmpfile.tmp dnsmasq-blocked-hosts.txt unbound-blocked-hosts.conf; exit 1' INT HUP TERM
+
 # Get all host files and concatenate into one.
-echo "$online_hosts_list" | xargs -n 1 wget -O - > "$tmpfile"
+if [ "$OS" = "OpenBSD" ]; then
+    # We don't need wget on OpenBSD.
+    echo "$online_hosts_list" | xargs -n 1 ftp -S noverifytime -o - > "$tmpfile"
+else
+    echo "$online_hosts_list" | xargs -n 1 wget -O - > "$tmpfile"
+fi
 
 # Personal blacklist
 if [ ! -f "blacklist.txt" ]; then
@@ -23,12 +33,14 @@ fi
 # Whitelist.
 if [ ! -f "whitelist.txt" ]; then
     printf "\nNo whitelist.txt found, running without.\n\n"
+    # Make all lower case.
+    tr '[:upper:]' '[:lower:]' < "$tmpfile" > "$tmpfile".tmp
+    mv "$tmpfile".tmp "$tmpfile"
 else
     grep -F -f whitelist.txt -v -- "$tmpfile" > "$tmpfile".tmp
+    # Make all lower case.
+    tr '[:upper:]' '[:lower:]' < "$tmpfile".tmp > "$tmpfile"
 fi
-
-# Make all lower case.
-tr '[:upper:]' '[:lower:]' < "$tmpfile.tmp" > "$tmpfile"
 
 # Delete specific lines we don't want, try to fix typos and then cleanup.
 sed -i '/^#/d' "$tmpfile"
