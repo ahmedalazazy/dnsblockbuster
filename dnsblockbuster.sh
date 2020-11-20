@@ -12,7 +12,7 @@ fi
 # Create a temporary file.
 tmpfile=$(mktemp)
 
-# Graceful cleanup and exit when script is done.
+# Graceful cleanup in case of program abort, like a user hitting CTRL-C.
 trap 'rm -f $tmpfile $tmpfile.tmp dnsmasq-blocked-hosts.txt unbound-blocked-hosts.conf; exit 1' INT HUP TERM
 
 # Get all host files and concatenate into one.
