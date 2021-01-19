@@ -51,10 +51,16 @@ Feel free to contribute!
 
 By default DNSBlockBuster uses a list of online hosts files listed in [online-hosts-files.txt](online-hosts-files.txt), these are the default hosts files. If you don't want to use those, or simply want to remove or add some, copy the file into a new one called `personal-online-hosts-files.txt` and edit that to suit your needs.
 
-Generate the DNS block files with running:
+Make the script executable:
 
 ```
-$ sh dnsblockbuster.sh
+$ chmod +x dnsblockbuster
+```
+
+Then generate the DNS block files by running the script:
+
+```
+$ ./dnsblockbuster
 ```
 
 DNSBlockBuster creates two files. `unbound-blocked-hosts.conf` is for usage with Unbound, while `dnsmasq-blocked-hosts.conf` is for dnsmasq.
