@@ -53,22 +53,25 @@ sed -i '/^ff0/d' "$tmpfile"
 sed -i '/^fe80/d' "$tmpfile"
 sed -i '/^0.0.0.0 0.0.0.0$/d' "$tmpfile"
 sed -i 's/0.0.0.0 0.0.0.0.//' "$tmpfile"
-sed -i 's/0.0.0.0 //' "$tmpfile"
+sed -Ei 's/^(0.0.0.0 |0.0.0.0)//' "$tmpfile"
 
 # Delete all empty lines.
 sed -i '/^$/d' "$tmpfile"
 
+# Delete carriage-return.
+tr -d '\r' < "$tmpfile" > "$tmpfile".tmp
+
 # Make proper host format.
-sed -i '/^0\.0\.0\.0/! s/^/0.0.0.0 /' "$tmpfile"
+sed -i '/^0\.0\.0\.0/! s/^/0.0.0.0 /' "$tmpfile".tmp
 
 # Some entries are duplicated because of comments after the domain like this:
 # 0.0.0.0 foo.bar
 # 0.0.0.0 foo.bar #foo's domain
 # This cleans all of that up.
-awk '/^0.0.0.0/ { print "0.0.0.0", $2 }' "$tmpfile" > "$tmpfile".tmp
+awk '/^0.0.0.0/ { print "0.0.0.0", $2 }' "$tmpfile".tmp > "$tmpfile"
 
 # Remove duplicate entries and create dnsmasq hosts file.
-awk '!seen[$0]++' "$tmpfile".tmp > dnsmasq-blocked-hosts.txt
+awk '!seen[$0]++' "$tmpfile" > dnsmasq-blocked-hosts.txt
 
 # Create Unbound hosts file from the dnsmasq hosts file.
 awk '/^0.0.0.0/ {
