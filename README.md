@@ -117,13 +117,13 @@ If you do get an error you need to do some "bug hunting". I advice that you use 
 For the Unbound block list you can catch any line with wrong syntax using:
 
 ```
-# grep -nv '^local-zone: ".*" always_nxdomain$' unbound-blocked-hosts.conf | more
+$ grep -nv '^local-zone: ".*" always_nxdomain$' unbound-blocked-hosts.conf
 ```
 
 You can also check the dnsmasq block list for any lines that, for example, doesn't begin with 0.0.0.0:
 
 ```
-# grep rnv "^0.0.0.0" dnsmasq-blocked-hosts.txt
+$ grep -nv "^0.0.0.0" dnsmasq-blocked-hosts.txt
 ```
 
 Both Unbound and dnsmasq will simply ignore duplicates, and DNSBlockBuster tries to remove any duplicate entries, but if you need to, you can manually locate them with:
